@@ -1,0 +1,50 @@
+import {
+  Combine,
+  SplitSquareHorizontal,
+  Minimize2,
+  FileText,
+  FileType,
+  Sheet,
+  Presentation,
+  Image,
+  ImageDown,
+  RotateCw,
+  Unlock,
+  Lock,
+  Droplets,
+  Hash,
+  Trash2,
+  LayoutGrid,
+  FileOutput,
+  Wrench,
+  ScanText,
+  Code,
+  type LucideIcon,
+} from "lucide-react";
+
+const ICON_MAP: Record<string, LucideIcon> = {
+  Combine,
+  SplitSquareHorizontal,
+  Minimize2,
+  FileText,
+  FileType,
+  Sheet,
+  Presentation,
+  Image,
+  ImageDown,
+  RotateCw,
+  Unlock,
+  Lock,
+  Droplets,
+  Hash,
+  Trash2,
+  LayoutGrid,
+  FileOutput,
+  Wrench,
+  ScanText,
+  Code,
+};
+
+export function getToolIcon(name: string): LucideIcon {
+  return ICON_MAP[name] ?? FileText;
+}

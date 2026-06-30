@@ -1,0 +1,78 @@
+{
+  "common": {
+    "appName": "ILPDF",
+    "tagline": "Alle PDF-Tools die Sie brauchen",
+    "getStarted": "Loslegen",
+    "learnMore": "Mehr erfahren",
+    "upload": "Hochladen",
+    "download": "Herunterladen",
+    "processing": "Verarbeitung...",
+    "cancel": "Abbrechen",
+    "retry": "Wiederholen",
+    "delete": "Löschen",
+    "save": "Speichern",
+    "search": "Suchen",
+    "loading": "Laden...",
+    "error": "Etwas ist schiefgelaufen",
+    "success": "Erfolg!",
+    "free": "Kostenlos",
+    "secure": "Sicher",
+    "fast": "Schnell"
+  },
+  "nav": {
+    "tools": "Alle Tools",
+    "blog": "Blog",
+    "pricing": "Preise",
+    "login": "Anmelden",
+    "signup": "Registrieren",
+    "dashboard": "Dashboard",
+    "logout": "Abmelden"
+  },
+  "home": {
+    "hero": {
+      "title": "Alle PDF-Tools — 100% Kostenlos",
+      "subtitle": "PDFs zusammenführen, teilen, komprimieren, konvertieren, drehen und entsperren mit wenigen Klicks.",
+      "cta": "PDF-Tool wählen",
+      "uploadCta": "Oder PDF-Dateien hier ablegen"
+    },
+    "benefits": {
+      "title": "Warum ILPDF?",
+      "secure": { "title": "Sicher", "description": "256-Bit SSL-Verschlüsselung. Dateien werden automatisch gelöscht." },
+      "fast": { "title": "Blitzschnell", "description": "PDFs in Sekunden verarbeiten." },
+      "free": { "title": "100% Kostenlos", "description": "Alle Tools kostenlos ohne Wasserzeichen." },
+      "noSignup": { "title": "Keine Registrierung", "description": "Sofort loslegen." }
+    },
+    "howItWorks": {
+      "title": "So funktioniert's",
+      "step1": { "title": "Tool wählen", "description": "Über 20 PDF-Tools verfügbar." },
+      "step2": { "title": "Dateien hochladen", "description": "Drag & Drop oder Dateien auswählen." },
+      "step3": { "title": "Ergebnis herunterladen", "description": "Sofort Ihre Datei erhalten." }
+    },
+    "tools": { "title": "Alle PDF-Tools", "subtitle": "Alles für die Arbeit mit PDFs" },
+    "testimonials": { "title": "Von Millionen geliebt" },
+    "faq": { "title": "Häufig gestellte Fragen" },
+    "blog": { "title": "Neueste Blog-Beiträge", "readMore": "Weiterlesen" }
+  },
+  "tools": {
+    "dropFiles": "Dateien hier ablegen",
+    "selectFiles": "PDF-Dateien auswählen",
+    "or": "oder",
+    "maxSize": "Max. Dateigröße: {size}MB",
+    "addMore": "Weitere Dateien hinzufügen",
+    "process": "Verarbeiten",
+    "preview": "Vorschau",
+    "result": "Ihre Datei ist fertig!",
+    "downloadResult": "Ergebnis herunterladen"
+  },
+  "footer": {
+    "description": "Kostenlose Online-PDF-Tools für alle.",
+    "product": "Produkt",
+    "company": "Unternehmen",
+    "legal": "Rechtliches",
+    "about": "Über uns",
+    "contact": "Kontakt",
+    "privacy": "Datenschutz",
+    "terms": "Nutzungsbedingungen",
+    "copyright": "© {year} ILPDF. Alle Rechte vorbehalten."
+  }
+}

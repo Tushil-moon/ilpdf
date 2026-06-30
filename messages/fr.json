@@ -1,0 +1,78 @@
+{
+  "common": {
+    "appName": "ILPDF",
+    "tagline": "Tous les outils PDF dont vous avez besoin",
+    "getStarted": "Commencer",
+    "learnMore": "En savoir plus",
+    "upload": "Télécharger",
+    "download": "Télécharger",
+    "processing": "Traitement...",
+    "cancel": "Annuler",
+    "retry": "Réessayer",
+    "delete": "Supprimer",
+    "save": "Enregistrer",
+    "search": "Rechercher",
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "success": "Succès !",
+    "free": "Gratuit",
+    "secure": "Sécurisé",
+    "fast": "Rapide"
+  },
+  "nav": {
+    "tools": "Tous les outils",
+    "blog": "Blog",
+    "pricing": "Tarifs",
+    "login": "Connexion",
+    "signup": "S'inscrire",
+    "dashboard": "Tableau de bord",
+    "logout": "Déconnexion"
+  },
+  "home": {
+    "hero": {
+      "title": "Tous les outils PDF — 100% Gratuit",
+      "subtitle": "Fusionnez, divisez, compressez, convertissez, faites pivoter et déverrouillez vos PDF en quelques clics.",
+      "cta": "Choisir un outil PDF",
+      "uploadCta": "Ou déposez vos fichiers PDF ici"
+    },
+    "benefits": {
+      "title": "Pourquoi choisir ILPDF ?",
+      "secure": { "title": "Sécurisé", "description": "Chiffrement SSL 256 bits. Fichiers supprimés automatiquement." },
+      "fast": { "title": "Ultra rapide", "description": "Traitez vos PDF en quelques secondes." },
+      "free": { "title": "100% Gratuit", "description": "Tous les outils gratuits sans filigrane." },
+      "noSignup": { "title": "Sans inscription", "description": "Commencez immédiatement." }
+    },
+    "howItWorks": {
+      "title": "Comment ça marche",
+      "step1": { "title": "Choisissez un outil", "description": "Plus de 20 outils PDF disponibles." },
+      "step2": { "title": "Téléchargez vos fichiers", "description": "Glissez-déposez ou sélectionnez." },
+      "step3": { "title": "Téléchargez le résultat", "description": "Obtenez votre fichier instantanément." }
+    },
+    "tools": { "title": "Tous les outils PDF", "subtitle": "Tout ce dont vous avez besoin pour les PDF" },
+    "testimonials": { "title": "Adoré par des millions" },
+    "faq": { "title": "Questions fréquentes" },
+    "blog": { "title": "Derniers articles", "readMore": "Lire la suite" }
+  },
+  "tools": {
+    "dropFiles": "Déposez vos fichiers ici",
+    "selectFiles": "Sélectionner des fichiers PDF",
+    "or": "ou",
+    "maxSize": "Taille max : {size} Mo",
+    "addMore": "Ajouter des fichiers",
+    "process": "Traiter",
+    "preview": "Aperçu",
+    "result": "Votre fichier est prêt !",
+    "downloadResult": "Télécharger le résultat"
+  },
+  "footer": {
+    "description": "Outils PDF en ligne gratuits pour tous.",
+    "product": "Produit",
+    "company": "Entreprise",
+    "legal": "Légal",
+    "about": "À propos",
+    "contact": "Contact",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation",
+    "copyright": "© {year} ILPDF. Tous droits réservés."
+  }
+}

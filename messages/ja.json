@@ -1,0 +1,78 @@
+{
+  "common": {
+    "appName": "ILPDF",
+    "tagline": "必要なPDFツールがすべて揃う",
+    "getStarted": "始める",
+    "learnMore": "詳しく見る",
+    "upload": "アップロード",
+    "download": "ダウンロード",
+    "processing": "処理中...",
+    "cancel": "キャンセル",
+    "retry": "再試行",
+    "delete": "削除",
+    "save": "保存",
+    "search": "検索",
+    "loading": "読み込み中...",
+    "error": "エラーが発生しました",
+    "success": "成功！",
+    "free": "無料",
+    "secure": "安全",
+    "fast": "高速"
+  },
+  "nav": {
+    "tools": "すべてのツール",
+    "blog": "ブログ",
+    "pricing": "料金",
+    "login": "ログイン",
+    "signup": "新規登録",
+    "dashboard": "ダッシュボード",
+    "logout": "ログアウト"
+  },
+  "home": {
+    "hero": {
+      "title": "すべてのPDFツール — 100%無料",
+      "subtitle": "PDFの結合、分割、圧縮、変換、回転、ロック解除を数クリックで。",
+      "cta": "PDFツールを選ぶ",
+      "uploadCta": "またはPDFファイルをここにドロップ"
+    },
+    "benefits": {
+      "title": "ILPDFを選ぶ理由",
+      "secure": { "title": "安全", "description": "256ビットSSL暗号化。処理後に自動削除。" },
+      "fast": { "title": "超高速", "description": "数秒でPDFを処理。" },
+      "free": { "title": "100%無料", "description": "透かしなしで全ツール無料。" },
+      "noSignup": { "title": "登録不要", "description": "すぐに使い始められます。" }
+    },
+    "howItWorks": {
+      "title": "使い方",
+      "step1": { "title": "ツールを選ぶ", "description": "20以上のPDFツールから選択。" },
+      "step2": { "title": "ファイルをアップロード", "description": "ドラッグ＆ドロップまたは選択。" },
+      "step3": { "title": "結果をダウンロード", "description": "すぐにファイルを取得。" }
+    },
+    "tools": { "title": "すべてのPDFツール", "subtitle": "PDF作業に必要なすべて" },
+    "testimonials": { "title": "多くのユーザーに愛用" },
+    "faq": { "title": "よくある質問" },
+    "blog": { "title": "最新ブログ", "readMore": "続きを読む" }
+  },
+  "tools": {
+    "dropFiles": "ファイルをここにドロップ",
+    "selectFiles": "PDFファイルを選択",
+    "or": "または",
+    "maxSize": "最大ファイルサイズ: {size}MB",
+    "addMore": "ファイルを追加",
+    "process": "処理",
+    "preview": "プレビュー",
+    "result": "ファイルの準備ができました！",
+    "downloadResult": "結果をダウンロード"
+  },
+  "footer": {
+    "description": "誰でも使える無料オンラインPDFツール。",
+    "product": "製品",
+    "company": "会社",
+    "legal": "法的情報",
+    "about": "概要",
+    "contact": "お問い合わせ",
+    "privacy": "プライバシーポリシー",
+    "terms": "利用規約",
+    "copyright": "© {year} ILPDF. All rights reserved."
+  }
+}

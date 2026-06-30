@@ -1,0 +1,78 @@
+{
+  "common": {
+    "appName": "ILPDF",
+    "tagline": "Todas las herramientas PDF que necesitas",
+    "getStarted": "Comenzar",
+    "learnMore": "Saber más",
+    "upload": "Subir",
+    "download": "Descargar",
+    "processing": "Procesando...",
+    "cancel": "Cancelar",
+    "retry": "Reintentar",
+    "delete": "Eliminar",
+    "save": "Guardar",
+    "search": "Buscar",
+    "loading": "Cargando...",
+    "error": "Algo salió mal",
+    "success": "¡Éxito!",
+    "free": "Gratis",
+    "secure": "Seguro",
+    "fast": "Rápido"
+  },
+  "nav": {
+    "tools": "Todas las herramientas",
+    "blog": "Blog",
+    "pricing": "Precios",
+    "login": "Iniciar sesión",
+    "signup": "Registrarse",
+    "dashboard": "Panel",
+    "logout": "Cerrar sesión"
+  },
+  "home": {
+    "hero": {
+      "title": "Todas las herramientas PDF — 100% Gratis",
+      "subtitle": "Combina, divide, comprime, convierte, rota, desbloquea y marca PDFs con solo unos clics.",
+      "cta": "Elegir una herramienta PDF",
+      "uploadCta": "O arrastra archivos PDF aquí"
+    },
+    "benefits": {
+      "title": "¿Por qué elegir ILPDF?",
+      "secure": { "title": "Seguro", "description": "Cifrado SSL de 256 bits. Archivos eliminados automáticamente." },
+      "fast": { "title": "Ultra rápido", "description": "Procesa PDFs en segundos." },
+      "free": { "title": "100% Gratis", "description": "Todas las herramientas gratis sin marcas de agua." },
+      "noSignup": { "title": "Sin registro", "description": "Empieza a usar las herramientas inmediatamente." }
+    },
+    "howItWorks": {
+      "title": "Cómo funciona",
+      "step1": { "title": "Elige una herramienta", "description": "Selecciona entre más de 20 herramientas PDF." },
+      "step2": { "title": "Sube archivos", "description": "Arrastra y suelta o selecciona archivos." },
+      "step3": { "title": "Descarga el resultado", "description": "Obtén tu archivo procesado al instante." }
+    },
+    "tools": { "title": "Todas las herramientas PDF", "subtitle": "Todo lo que necesitas para trabajar con PDFs" },
+    "testimonials": { "title": "Amado por millones" },
+    "faq": { "title": "Preguntas frecuentes" },
+    "blog": { "title": "Último del blog", "readMore": "Leer más" }
+  },
+  "tools": {
+    "dropFiles": "Arrastra tus archivos aquí",
+    "selectFiles": "Seleccionar archivos PDF",
+    "or": "o",
+    "maxSize": "Tamaño máximo: {size}MB",
+    "addMore": "Añadir más archivos",
+    "process": "Procesar",
+    "preview": "Vista previa",
+    "result": "¡Tu archivo está listo!",
+    "downloadResult": "Descargar resultado"
+  },
+  "footer": {
+    "description": "Herramientas PDF online gratuitas para todos.",
+    "product": "Producto",
+    "company": "Empresa",
+    "legal": "Legal",
+    "about": "Acerca de",
+    "contact": "Contacto",
+    "privacy": "Política de privacidad",
+    "terms": "Términos de servicio",
+    "copyright": "© {year} ILPDF. Todos los derechos reservados."
+  }
+}

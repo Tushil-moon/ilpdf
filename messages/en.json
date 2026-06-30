@@ -1,0 +1,109 @@
+{
+  "common": {
+    "appName": "ILPDF",
+    "tagline": "Every PDF tool you need",
+    "getStarted": "Get Started",
+    "learnMore": "Learn More",
+    "upload": "Upload",
+    "download": "Download",
+    "processing": "Processing...",
+    "cancel": "Cancel",
+    "retry": "Retry",
+    "delete": "Delete",
+    "save": "Save",
+    "search": "Search",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "success": "Success!",
+    "free": "Free",
+    "secure": "Secure",
+    "fast": "Fast"
+  },
+  "nav": {
+    "tools": "All Tools",
+    "blog": "Blog",
+    "pricing": "Pricing",
+    "login": "Log In",
+    "signup": "Sign Up",
+    "dashboard": "Dashboard",
+    "logout": "Log Out"
+  },
+  "home": {
+    "hero": {
+      "title": "Every PDF tool you need — 100% Free",
+      "subtitle": "Merge, split, compress, convert, rotate, unlock and watermark PDFs with just a few clicks. Fast, secure, and no registration required.",
+      "cta": "Choose a PDF Tool",
+      "uploadCta": "Or drop PDF files here"
+    },
+    "benefits": {
+      "title": "Why choose ILPDF?",
+      "secure": {
+        "title": "Secure",
+        "description": "256-bit SSL encryption. Files auto-deleted after processing."
+      },
+      "fast": {
+        "title": "Lightning Fast",
+        "description": "Process PDFs in seconds with our optimized infrastructure."
+      },
+      "free": {
+        "title": "100% Free",
+        "description": "All tools free with no watermarks or hidden fees."
+      },
+      "noSignup": {
+        "title": "No Registration",
+        "description": "Start using tools immediately. No account needed."
+      }
+    },
+    "howItWorks": {
+      "title": "How it works",
+      "step1": {
+        "title": "Choose a tool",
+        "description": "Select from 20+ PDF tools for any task."
+      },
+      "step2": {
+        "title": "Upload files",
+        "description": "Drag & drop or select files from your device."
+      },
+      "step3": {
+        "title": "Download result",
+        "description": "Get your processed file instantly."
+      }
+    },
+    "tools": {
+      "title": "All PDF Tools",
+      "subtitle": "Everything you need to work with PDFs"
+    },
+    "testimonials": {
+      "title": "Loved by millions"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions"
+    },
+    "blog": {
+      "title": "Latest from our blog",
+      "readMore": "Read more"
+    }
+  },
+  "tools": {
+    "dropFiles": "Drop your files here",
+    "selectFiles": "Select PDF files",
+    "or": "or",
+    "maxSize": "Max file size: {size}MB",
+    "addMore": "Add more files",
+    "process": "Process",
+    "preview": "Preview",
+    "result": "Your file is ready!",
+    "downloadResult": "Download result"
+  },
+  "footer": {
+    "description": "Free online PDF tools for everyone.",
+    "product": "Product",
+    "company": "Company",
+    "legal": "Legal",
+    "about": "About",
+    "contact": "Contact",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "copyright": "© {year} ILPDF. All rights reserved."
+  }
+}

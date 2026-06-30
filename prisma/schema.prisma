@@ -1,0 +1,291 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum FileStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  DELETED
+}
+
+enum JobStatus {
+  QUEUED
+  ACTIVE
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
+  role          UserRole  @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  sessions      Session[]
+  accounts      Account[]
+  files         File[]
+  downloads     Download[]
+  favorites     FavoriteTool[]
+  apiKeys       ApiKey[]
+  comments      Comment[]
+  blogPosts     BlogPost[]
+  feedback      Feedback[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@map("accounts")
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("verifications")
+}
+
+model File {
+  id           String     @id @default(cuid())
+  userId       String?
+  user         User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
+  originalName String
+  storageKey   String
+  mimeType     String
+  size         Int
+  toolSlug     String
+  status       FileStatus @default(PENDING)
+  resultKey    String?
+  resultName   String?
+  metadata     Json?
+  expiresAt    DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  jobs         Job[]
+  downloads    Download[]
+
+  @@index([userId])
+  @@index([toolSlug])
+  @@index([status])
+  @@map("files")
+}
+
+model Job {
+  id        String    @id @default(cuid())
+  fileId    String
+  file      File      @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  toolSlug  String
+  status    JobStatus @default(QUEUED)
+  progress  Int       @default(0)
+  options   Json?
+  error     String?
+  bullJobId String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([fileId])
+  @@index([status])
+  @@map("jobs")
+}
+
+model Download {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  fileId    String
+  file      File     @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("downloads")
+}
+
+model FavoriteTool {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  toolSlug  String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, toolSlug])
+  @@map("favorite_tools")
+}
+
+model ApiKey {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  keyHash   String    @unique
+  prefix    String
+  lastUsed  DateTime?
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@map("api_keys")
+}
+
+model BlogCategory {
+  id          String     @id @default(cuid())
+  name        String
+  slug        String     @unique
+  description String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  posts       BlogPost[]
+
+  @@map("blog_categories")
+}
+
+model BlogPost {
+  id          String        @id @default(cuid())
+  title       String
+  slug        String        @unique
+  excerpt     String
+  content     String
+  coverImage  String?
+  published   Boolean       @default(false)
+  publishedAt DateTime?
+  authorId    String
+  author      User          @relation(fields: [authorId], references: [id])
+  categoryId  String?
+  category    BlogCategory? @relation(fields: [categoryId], references: [id])
+  tags        BlogTag[]
+  metaTitle   String?
+  metaDesc    String?
+  keywords    String[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  comments    Comment[]
+
+  @@index([slug])
+  @@index([published])
+  @@map("blog_posts")
+}
+
+model BlogTag {
+  id     String     @id @default(cuid())
+  name   String
+  slug   String     @unique
+  posts  BlogPost[]
+
+  @@map("blog_tags")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  postId    String
+  post      BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([postId])
+  @@map("comments")
+}
+
+model Feedback {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  email     String?
+  message   String
+  rating    Int?
+  toolSlug  String?
+  resolved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("feedback")
+}
+
+model Advertisement {
+  id        String   @id @default(cuid())
+  title     String
+  imageUrl  String
+  linkUrl   String
+  position  String
+  active    Boolean  @default(true)
+  startDate DateTime?
+  endDate   DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("advertisements")
+}
+
+model SystemSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     Json
+  updatedAt DateTime @updatedAt
+
+  @@map("system_settings")
+}
+
+model SeoPage {
+  id          String   @id @default(cuid())
+  path        String   @unique
+  title       String
+  description String
+  keywords    String[]
+  ogImage     String?
+  noIndex     Boolean  @default(false)
+  updatedAt   DateTime @updatedAt
+
+  @@map("seo_pages")
+}
