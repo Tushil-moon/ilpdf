@@ -6,7 +6,6 @@ import { BenefitsSection } from "@/components/home/benefits-section";
 import { HowItWorksSection } from "@/components/home/how-it-works-section";
 import { TestimonialsSection } from "@/components/home/testimonials-section";
 import { FaqSection } from "@/components/home/faq-section";
-import { HomeBannerAd } from "@/components/ads/ad-placements";
 import { BLOG_POSTS } from "@/lib/blog";
 import { HOMEPAGE_FAQ } from "@/lib/tools";
 import { buildMetadata, buildHomeSeo, JsonLd, organizationSchema, websiteSchema, faqSchema } from "@/lib/seo";
@@ -32,7 +31,6 @@ export default async function HomePage({
     <>
       <JsonLd data={[organizationSchema(), websiteSchema(), faqSchema(HOMEPAGE_FAQ)]} />
       <HeroSection />
-      <HomeBannerAd />
       <ToolsGridSection />
       <BenefitsSection />
       <HowItWorksSection />

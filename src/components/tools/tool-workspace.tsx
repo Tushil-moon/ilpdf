@@ -6,7 +6,6 @@ import { useUploadQueue } from "@/hooks/use-upload-queue";
 import { useToolPageState } from "@/hooks/use-tool-page-state";
 import { FileUploadZone } from "@/components/tools/file-upload-zone";
 import { ToolOptions } from "@/components/tools/tool-options";
-import { ToolPageAds } from "@/components/ads/ad-placements";
 import { usesPageEditor } from "@/lib/tool-page-editor";
 
 interface ToolWorkspaceProps {
@@ -64,7 +63,6 @@ export function ToolWorkspace({ tool }: ToolWorkspaceProps) {
         pageState={showEditor ? pageState : null}
         canProcess={canProcess}
       />
-      <ToolPageAds />
     </div>
   );
 }
