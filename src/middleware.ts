@@ -9,11 +9,31 @@ const intlMiddleware = createMiddleware(routing);
 const protectedRoutes = ["/dashboard", "/admin"];
 const authRoutes = ["/login", "/signup"];
 
+const METADATA_ROUTES = new Set([
+  "/icon",
+  "/apple-icon",
+  "/opengraph-image",
+  "/robots.txt",
+  "/sitemap.xml",
+  "/manifest.webmanifest",
+  "/site.webmanifest",
+  "/ads.txt",
+  "/pdf.worker.min.mjs",
+]);
+
+function shouldSkipIntl(pathname: string): boolean {
+  if (METADATA_ROUTES.has(pathname)) return true;
+  if (/\.(?:mjs|js|wasm|css|woff2?|map|txt|webmanifest|xml|ico|svg|png|jpg|jpeg|gif|webp)$/.test(pathname)) {
+    return true;
+  }
+  return false;
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Static assets from /public (worker, ads.txt, fonts, etc.)
-  if (/\.(?:mjs|js|wasm|css|woff2?|map|txt)$/.test(pathname) || pathname === "/ads.txt") {
+  // Next.js metadata routes + static public assets (must skip i18n)
+  if (shouldSkipIntl(pathname)) {
     return NextResponse.next();
   }
 
@@ -58,6 +78,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|ads\\.txt|pdf\\.worker\\.min\\.mjs|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|mjs|wasm|txt)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|icon|apple-icon|opengraph-image|robots.txt|sitemap.xml|manifest.webmanifest|site.webmanifest|ads\\.txt|pdf\\.worker\\.min\\.mjs|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|mjs|wasm|txt|webmanifest|xml)$).*)",
   ],
 };
