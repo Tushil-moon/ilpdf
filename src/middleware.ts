@@ -12,8 +12,8 @@ const authRoutes = ["/login", "/signup"];
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Static assets from /public (worker, fonts, etc.)
-  if (/\.(?:mjs|js|wasm|css|woff2?|map)$/.test(pathname)) {
+  // Static assets from /public (worker, ads.txt, fonts, etc.)
+  if (/\.(?:mjs|js|wasm|css|woff2?|map|txt)$/.test(pathname) || pathname === "/ads.txt") {
     return NextResponse.next();
   }
 
@@ -58,6 +58,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|pdf\\.worker\\.min\\.mjs|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|mjs|wasm)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|ads\\.txt|pdf\\.worker\\.min\\.mjs|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|mjs|wasm|txt)$).*)",
   ],
 };

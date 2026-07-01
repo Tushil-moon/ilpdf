@@ -8,6 +8,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Analytics } from "@/components/analytics";
 import { AdSenseScript } from "@/components/ads/adsense-script";
+import { CookieConsent } from "@/components/legal/cookie-consent";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -60,6 +61,7 @@ export default async function LocaleLayout({
         </NextIntlClientProvider>
         <Analytics />
         <AdSenseScript />
+        <CookieConsent />
       </body>
     </html>
   );

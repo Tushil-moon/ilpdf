@@ -4,31 +4,41 @@ import { BLOG_POSTS } from "@/lib/blog";
 import { routing } from "@/i18n/routing";
 import { getAppUrl } from "@/lib/utils";
 
+const STATIC_PAGES = [
+  "",
+  "/tools",
+  "/blog",
+  "/pricing",
+  "/about",
+  "/contact",
+  "/privacy",
+  "/terms",
+  "/cookies",
+];
+
+const SITE_LAUNCH = new Date("2026-06-01");
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = getAppUrl();
-  const locales = routing.locales;
-
-  const staticPages = ["", "/tools", "/blog", "/pricing", "/about", "/contact", "/privacy", "/terms"];
-
   const entries: MetadataRoute.Sitemap = [];
 
-  for (const locale of locales) {
+  for (const locale of routing.locales) {
     const prefix = locale === routing.defaultLocale ? "" : `/${locale}`;
 
-    for (const page of staticPages) {
+    for (const page of STATIC_PAGES) {
       entries.push({
         url: `${baseUrl}${prefix}${page}`,
-        lastModified: new Date(),
+        lastModified: SITE_LAUNCH,
         changeFrequency: page === "" ? "daily" : "weekly",
-        priority: page === "" ? 1 : 0.8,
+        priority: page === "" ? 1 : page === "/tools" ? 0.95 : 0.8,
       });
     }
 
     for (const tool of PDF_TOOLS) {
       entries.push({
         url: `${baseUrl}${prefix}/tools/${tool.slug}`,
-        lastModified: new Date(),
-        changeFrequency: "monthly",
+        lastModified: SITE_LAUNCH,
+        changeFrequency: "weekly",
         priority: 0.9,
       });
     }

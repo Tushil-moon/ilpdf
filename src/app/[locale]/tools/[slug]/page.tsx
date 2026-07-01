@@ -8,10 +8,12 @@ import {
   JsonLd,
   breadcrumbSchema,
   faqSchema,
+  howToSchema,
   softwareApplicationSchema,
 } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { ToolWorkspace } from "@/components/tools/tool-workspace";
+import { RelatedTools } from "@/components/tools/related-tools";
 import { FaqSection } from "@/components/home/faq-section";
 import { getToolIcon } from "@/lib/icons";
 
@@ -24,10 +26,10 @@ export async function generateMetadata({
 }: {
   params: Promise<{ locale: string; slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const tool = getToolBySlug(slug);
   if (!tool) return {};
-  return buildMetadata(buildToolSeo(tool));
+  return buildMetadata(buildToolSeo(tool), locale);
 }
 
 export const revalidate = 86400;
@@ -56,6 +58,7 @@ export default async function ToolPage({
         data={[
           breadcrumbSchema(breadcrumbs),
           softwareApplicationSchema(tool),
+          howToSchema(tool),
           faqSchema(tool.faq),
         ]}
       />
@@ -114,6 +117,8 @@ export default async function ToolPage({
         <div className="mt-16">
           <FaqSection title={`${tool.name} FAQ`} items={tool.faq} />
         </div>
+
+        <RelatedTools current={tool} />
       </div>
     </>
   );
