@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import createMiddleware from "next-intl/middleware";
+import { getSessionCookie } from "better-auth/cookies";
 import { routing } from "@/i18n/routing";
 import { rateLimit, SECURITY_HEADERS } from "@/lib/security";
 
@@ -56,9 +57,9 @@ export async function middleware(request: NextRequest) {
   });
 
   const pathWithoutLocale = pathname.replace(/^\/(en|es|fr|de|ja)/, "") || "/";
+  const sessionCookie = getSessionCookie(request);
 
   if (protectedRoutes.some((route) => pathWithoutLocale.startsWith(route))) {
-    const sessionCookie = request.cookies.get("better-auth.session_token");
     if (!sessionCookie) {
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("callbackUrl", pathname);
@@ -67,9 +68,10 @@ export async function middleware(request: NextRequest) {
   }
 
   if (authRoutes.some((route) => pathWithoutLocale.startsWith(route))) {
-    const sessionCookie = request.cookies.get("better-auth.session_token");
     if (sessionCookie) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
+      const callbackUrl = request.nextUrl.searchParams.get("callbackUrl");
+      const destination = callbackUrl?.startsWith("/") ? callbackUrl : "/dashboard";
+      return NextResponse.redirect(new URL(destination, request.url));
     }
   }
 

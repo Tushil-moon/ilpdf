@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
+import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,6 +27,7 @@ const signupSchema = z
 type SignupForm = z.infer<typeof signupSchema>;
 
 export default function SignupPage() {
+  const router = useRouter();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -41,12 +43,19 @@ export default function SignupPage() {
     setLoading(true);
     setError("");
     try {
-      await signUp.email({
+      const result = await signUp.email({
         email: data.email,
         password: data.password,
         name: data.name,
-        callbackURL: "/dashboard",
       });
+
+      if (result.error) {
+        setError(result.error.message || "Failed to create account. Email may already be in use.");
+        return;
+      }
+
+      router.push("/dashboard");
+      router.refresh();
     } catch {
       setError("Failed to create account. Email may already be in use.");
     } finally {
