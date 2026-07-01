@@ -23,9 +23,11 @@ export const metadata: Metadata = buildMetadata({
   description: "Manage your PDF files, downloads, and account settings.",
   keywords: ["dashboard", "pdf account"],
   canonical: "/dashboard",
-  ogImage: "/og/default.png",
+  ogImage: "/opengraph-image",
   noIndex: true,
 });
+
+export const dynamic = "force-dynamic";
 
 const quickLinks = [
   { href: "/dashboard/files", label: "Recent Files", icon: FileText },

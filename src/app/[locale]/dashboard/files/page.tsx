@@ -8,6 +8,8 @@ import { getToolBySlug } from "@/lib/tools";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { Button } from "@/components/ui/button";
 
+export const dynamic = "force-dynamic";
+
 export default async function DashboardFilesPage({
   params,
 }: {

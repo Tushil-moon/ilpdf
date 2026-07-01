@@ -6,6 +6,7 @@ import type { PdfTool } from "@/types";
 import { generateId } from "@/lib/utils";
 import { validateFile } from "@/lib/security";
 import { getClientProcessor, isServerOnlyTool } from "@/services/pdf-client";
+import { authClient } from "@/lib/auth-client";
 
 async function parseApiError(response: Response): Promise<string> {
   const text = await response.text();
@@ -26,6 +27,34 @@ function orderUploadFiles(
   const byId = new Map(activeFiles.map((f) => [f.id, f]));
   const ordered = order.map((id) => byId.get(id)).filter((f): f is UploadFile => !!f);
   return ordered.length > 0 ? ordered : activeFiles;
+}
+
+async function saveClientResultForUser(
+  blob: Blob,
+  fileName: string,
+  mimeType: string,
+  toolSlug: string,
+  originalName: string
+): Promise<{ url: string; name: string; fileId: string } | null> {
+  const formData = new FormData();
+  formData.append("file", blob, fileName);
+  formData.append("toolSlug", toolSlug);
+  formData.append("originalName", originalName);
+
+  const response = await fetch("/api/record", {
+    method: "POST",
+    body: formData,
+    credentials: "same-origin",
+  });
+
+  if (!response.ok) return null;
+
+  const data = await response.json();
+  return {
+    url: data.downloadUrl as string,
+    name: (data.fileName as string) ?? fileName,
+    fileId: data.fileId as string,
+  };
 }
 
 export function useUploadQueue(tool: PdfTool) {
@@ -157,10 +186,28 @@ export function useUploadQueue(tool: PdfTool) {
           const blob = new Blob([new Uint8Array(jobResult.data)], {
             type: jobResult.mimeType,
           });
+          const fileName = jobResult.fileName ?? "result.pdf";
+          const blobUrl = URL.createObjectURL(blob);
+
           output = {
-            url: URL.createObjectURL(blob),
-            name: jobResult.fileName ?? "result.pdf",
+            url: blobUrl,
+            name: fileName,
           };
+
+          const session = await authClient.getSession();
+          if (session?.data?.user) {
+            const saved = await saveClientResultForUser(
+              blob,
+              fileName,
+              jobResult.mimeType ?? "application/pdf",
+              tool.slug,
+              activeFiles[0]?.file.name ?? fileName
+            );
+            if (saved) {
+              URL.revokeObjectURL(blobUrl);
+              output = saved;
+            }
+          }
         }
 
         setFiles((prev) =>
