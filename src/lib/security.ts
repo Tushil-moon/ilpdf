@@ -50,6 +50,7 @@ export const SECURITY_HEADERS = {
       "https://adservice.google.com",
       "https://www.gstatic.com",
       "https://*.google.com",
+      "https://*.adtrafficquality.google",
     ].join(" "),
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "img-src 'self' data: blob: https: http:",
