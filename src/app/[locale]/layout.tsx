@@ -58,10 +58,10 @@ export default async function LocaleLayout({
             <main className="flex-1">{children}</main>
             <Footer />
           </Providers>
+          <CookieConsent />
         </NextIntlClientProvider>
         <Analytics />
         <AdSenseScript />
-        <CookieConsent />
       </body>
     </html>
   );

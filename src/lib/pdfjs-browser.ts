@@ -11,7 +11,7 @@ async function configurePdfWorker() {
   const response = await fetch(workerUrl);
 
   if (!response.ok) {
-    throw new Error(`PDF worker not found (${response.status}). Restart the dev server.`);
+    throw new Error(`PDF worker not found (${response.status})`);
   }
 
   const blob = await response.blob();
@@ -20,7 +20,10 @@ async function configurePdfWorker() {
 
 export async function getBrowserPdfJs() {
   if (!configurePromise) {
-    configurePromise = configurePdfWorker();
+    configurePromise = configurePdfWorker().catch((error) => {
+      configurePromise = null;
+      throw error;
+    });
   }
   await configurePromise;
   return pdfjs;
