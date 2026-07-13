@@ -1,20 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Script from "next/script";
-import { getCookieConsent } from "@/components/legal/cookie-consent";
+import { useCookieConsent } from "@/hooks/use-cookie-consent";
 
 export function Analytics() {
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
   const clarityId = process.env.NEXT_PUBLIC_CLARITY_ID;
-  const [enabled, setEnabled] = useState(false);
-
-  useEffect(() => {
-    setEnabled(getCookieConsent());
-    const onConsent = () => setEnabled(getCookieConsent());
-    window.addEventListener("ilpdf-cookie-consent", onConsent);
-    return () => window.removeEventListener("ilpdf-cookie-consent", onConsent);
-  }, []);
+  const enabled = useCookieConsent();
 
   if (!enabled) return null;
 

@@ -22,13 +22,12 @@ import {
   unlockPdf,
   protectPdfServer,
   ocrPdf,
-  compressPdfAdvanced,
 } from "@/services/server-processors";
 
 const ALL_PROCESSORS: Record<string, PdfProcessor> = {
-  "merge-pdf": (files) => mergePdfs(files),
+  "merge-pdf": (files, opts) => mergePdfs(files, opts),
   "split-pdf": (files, opts) => splitPdf(files[0], opts),
-  "compress-pdf": (files) => compressPdfAdvanced(files[0]),
+  "compress-pdf": (files, opts) => compressPdf(files[0], opts),
   "rotate-pdf": (files, opts) => rotatePdf(files[0], opts),
   "delete-pages": (files, opts) => deletePages(files[0], opts),
   "extract-pages": (files, opts) => splitPdf(files[0], opts),
@@ -36,8 +35,8 @@ const ALL_PROCESSORS: Record<string, PdfProcessor> = {
   "watermark-pdf": (files, opts) => addWatermark(files[0], opts),
   "protect-pdf": (files, opts) => protectPdfServer(files[0], opts),
   "organize-pdf": (files, opts) => organizePdf(files[0], opts),
-  "repair-pdf": (files) => repairPdf(files[0]),
-  "jpg-to-pdf": (files) => imagesToPdf(files),
+  "repair-pdf": (files, opts) => repairPdf(files[0], opts),
+  "jpg-to-pdf": (files, opts) => imagesToPdf(files, opts),
   "pdf-to-jpg": (files, opts) => pdfToJpg(files[0], opts),
   "pdf-to-word": (files) => pdfToWord(files[0]),
   "word-to-pdf": (files) => wordToPdf(files[0]),
@@ -50,4 +49,12 @@ const ALL_PROCESSORS: Record<string, PdfProcessor> = {
 
 export function getServerProcessor(toolSlug: string): PdfProcessor | undefined {
   return ALL_PROCESSORS[toolSlug];
+}
+
+export function getAllServerToolSlugs(): string[] {
+  return Object.keys(ALL_PROCESSORS);
+}
+
+export function isToolSupportedOnServer(toolSlug: string): boolean {
+  return toolSlug in ALL_PROCESSORS;
 }

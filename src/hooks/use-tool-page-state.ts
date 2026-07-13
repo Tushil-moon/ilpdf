@@ -32,11 +32,7 @@ export function useToolPageState(toolSlug: string, activeFiles: UploadFile[]) {
   const fileKey = activeFiles.map((f) => `${f.id}:${f.file.name}:${f.file.size}`).join("|");
 
   useEffect(() => {
-    if (!enabled || !mode) {
-      setPages([]);
-      setFileCards([]);
-      return;
-    }
+    if (!enabled || !mode) return;
 
     let cancelled = false;
 
@@ -174,8 +170,8 @@ export function useToolPageState(toolSlug: string, activeFiles: UploadFile[]) {
   return {
     mode,
     enabled,
-    pages,
-    fileCards,
+    pages: enabled ? pages : [],
+    fileCards: enabled ? fileCards : [],
     loading,
     error,
     toggleDelete,

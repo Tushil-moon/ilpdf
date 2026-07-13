@@ -5,18 +5,12 @@ import type { UploadFile, ProcessOptions } from "@/types";
 import type { PdfTool } from "@/types";
 import { generateId } from "@/lib/utils";
 import { validateFile } from "@/lib/security";
-import { getClientProcessor, isServerOnlyTool } from "@/services/pdf-client";
-import { authClient } from "@/lib/auth-client";
-
-async function parseApiError(response: Response): Promise<string> {
-  const text = await response.text();
-  try {
-    const json = JSON.parse(text) as { error?: string };
-    return json.error ?? "Server processing failed";
-  } catch {
-    return text.slice(0, 200) || `Server error (${response.status})`;
-  }
-}
+import {
+  readProcessStream,
+  stripProgressCallback,
+  type ProgressUpdate,
+} from "@/lib/process-progress";
+import type { ProcessingStatus } from "@/components/tools/processing-status";
 
 function orderUploadFiles(
   activeFiles: UploadFile[],
@@ -29,42 +23,45 @@ function orderUploadFiles(
   return ordered.length > 0 ? ordered : activeFiles;
 }
 
-async function saveClientResultForUser(
-  blob: Blob,
-  fileName: string,
-  mimeType: string,
-  toolSlug: string,
-  originalName: string
-): Promise<{ url: string; name: string; fileId: string } | null> {
-  const formData = new FormData();
-  formData.append("file", blob, fileName);
-  formData.append("toolSlug", toolSlug);
-  formData.append("originalName", originalName);
-
-  const response = await fetch("/api/record", {
-    method: "POST",
-    body: formData,
-    credentials: "same-origin",
-  });
-
-  if (!response.ok) return null;
-
-  const data = await response.json();
-  return {
-    url: data.downloadUrl as string,
-    name: (data.fileName as string) ?? fileName,
-    fileId: data.fileId as string,
-  };
-}
-
 export function useUploadQueue(tool: PdfTool) {
   const [files, setFiles] = useState<UploadFile[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [processingStatus, setProcessingStatus] = useState<ProcessingStatus | null>(null);
   const [result, setResult] = useState<{
     url: string;
     name: string;
     fileId?: string;
+    jobId?: string;
   } | null>(null);
+
+  const applyProgress = useCallback((activeIds: string[], update: ProgressUpdate) => {
+    setProcessingStatus({
+      progress: update.progress,
+      stage: update.stage,
+      message: update.message,
+    });
+
+    const status =
+      update.progress >= 100
+        ? ("completed" as const)
+        : update.stage === "uploading"
+          ? ("uploading" as const)
+          : ("processing" as const);
+
+    setFiles((prev) =>
+      prev.map((f) =>
+        activeIds.includes(f.id)
+          ? {
+              ...f,
+              progress: update.progress,
+              status,
+              stage: update.stage,
+              stageMessage: update.message,
+            }
+          : f
+      )
+    );
+  }, []);
 
   const addFiles = useCallback(
     (newFiles: FileList | File[]) => {
@@ -108,42 +105,37 @@ export function useUploadQueue(tool: PdfTool) {
 
   const processViaServer = useCallback(
     async (activeFiles: UploadFile[], options?: ProcessOptions) => {
+      const activeIds = activeFiles.map((f) => f.id);
       const formData = new FormData();
       activeFiles.forEach((f) => formData.append("files", f.file));
-      formData.append("toolSlug", tool.slug);
-      if (options) formData.append("options", JSON.stringify(options));
-
-      setFiles((prev) =>
-        prev.map((f) =>
-          activeFiles.find((af) => af.id === f.id)
-            ? { ...f, status: "uploading" as const, progress: 20 }
-            : f
-        )
-      );
-
-      const response = await fetch("/api/process", { method: "POST", body: formData });
-
-      setFiles((prev) =>
-        prev.map((f) =>
-          activeFiles.find((af) => af.id === f.id)
-            ? { ...f, status: "processing" as const, progress: 60 }
-            : f
-        )
-      );
-
-      if (!response.ok) {
-        const err = await parseApiError(response);
-        throw new Error(err);
+      if (options) {
+        formData.append("options", JSON.stringify(stripProgressCallback(options)));
       }
 
-      const data = await response.json();
+      applyProgress(activeIds, {
+        progress: 5,
+        stage: "uploading",
+        message: "Uploading files to server...",
+      });
+
+      const response = await fetch(`/api/v1/tools/${tool.slug}/process`, {
+        method: "POST",
+        body: formData,
+        credentials: "same-origin",
+      });
+
+      const complete = await readProcessStream(response, (update) =>
+        applyProgress(activeIds, update)
+      );
+
       return {
-        url: data.downloadUrl as string,
-        name: (data.fileName as string) ?? "result",
-        fileId: data.fileId as string | undefined,
+        url: complete.downloadUrl,
+        name: complete.fileName ?? "result",
+        fileId: complete.fileId,
+        jobId: complete.jobId,
       };
     },
-    [tool.slug]
+    [tool.slug, applyProgress]
   );
 
   const processFiles = useCallback(
@@ -154,65 +146,28 @@ export function useUploadQueue(tool: PdfTool) {
       );
       if (activeFiles.length === 0) return;
 
+      const activeIds = activeFiles.map((f) => f.id);
+
       setIsProcessing(true);
       setResult(null);
+      setProcessingStatus({
+        progress: 2,
+        stage: "preparing",
+        message: "Starting...",
+      });
 
       try {
-        const useServer = isServerOnlyTool(tool.slug);
-        const clientProcessor = getClientProcessor(tool.slug);
+        const output = await processViaServer(activeFiles, options);
 
-        let output: { url: string; name: string; fileId?: string };
-
-        if (useServer || !clientProcessor) {
-          output = await processViaServer(activeFiles, options);
-        } else {
-          setFiles((prev) =>
-            prev.map((f) =>
-              activeFiles.find((af) => af.id === f.id)
-                ? { ...f, status: "processing" as const, progress: 30 }
-                : f
-            )
-          );
-
-          const buffers = await Promise.all(
-            activeFiles.map(async (f) => new Uint8Array(await f.file.arrayBuffer()))
-          );
-
-          const jobResult = await clientProcessor(buffers, options);
-          if (!jobResult.success || !jobResult.data) {
-            throw new Error(jobResult.error ?? "Processing failed");
-          }
-
-          const blob = new Blob([new Uint8Array(jobResult.data)], {
-            type: jobResult.mimeType,
-          });
-          const fileName = jobResult.fileName ?? "result.pdf";
-          const blobUrl = URL.createObjectURL(blob);
-
-          output = {
-            url: blobUrl,
-            name: fileName,
-          };
-
-          const session = await authClient.getSession();
-          if (session?.data?.user) {
-            const saved = await saveClientResultForUser(
-              blob,
-              fileName,
-              jobResult.mimeType ?? "application/pdf",
-              tool.slug,
-              activeFiles[0]?.file.name ?? fileName
-            );
-            if (saved) {
-              URL.revokeObjectURL(blobUrl);
-              output = saved;
-            }
-          }
-        }
+        applyProgress(activeIds, {
+          progress: 100,
+          stage: "complete",
+          message: "Your file is ready!",
+        });
 
         setFiles((prev) =>
           prev.map((f) =>
-            activeFiles.find((af) => af.id === f.id)
+            activeIds.includes(f.id)
               ? {
                   ...f,
                   status: "completed" as const,
@@ -227,32 +182,37 @@ export function useUploadQueue(tool: PdfTool) {
         setResult(output);
       } catch (error) {
         const message = error instanceof Error ? error.message : "Processing failed";
+        setProcessingStatus({
+          progress: 0,
+          stage: "error",
+          message,
+        });
         setFiles((prev) =>
           prev.map((f) =>
-            activeFiles.find((af) => af.id === f.id)
-              ? { ...f, status: "error" as const, error: message }
+            activeIds.includes(f.id)
+              ? { ...f, status: "error" as const, error: message, progress: 0 }
               : f
           )
         );
       } finally {
         setIsProcessing(false);
+        setProcessingStatus(null);
       }
     },
-    [files, tool, processViaServer]
+    [files, processViaServer, applyProgress]
   );
 
   const reset = useCallback(() => {
-    files.forEach((f) => {
-      if (f.resultUrl?.startsWith("blob:")) URL.revokeObjectURL(f.resultUrl);
-    });
     setFiles([]);
     setResult(null);
     setIsProcessing(false);
-  }, [files]);
+    setProcessingStatus(null);
+  }, []);
 
   return {
     files,
     isProcessing,
+    processingStatus,
     result,
     addFiles,
     removeFile,

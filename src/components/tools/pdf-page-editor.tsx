@@ -64,8 +64,7 @@ export function PdfPageEditor({
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground">{MODE_HINTS[mode]}</p>
-      <div
-        className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5"
         role="list"
         aria-label="PDF pages"
       >

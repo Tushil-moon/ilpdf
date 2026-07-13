@@ -3,14 +3,16 @@
 import { useState } from "react";
 import { Download, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface DownloadButtonProps {
   url: string;
   fileName: string;
   size?: "default" | "sm" | "lg";
+  className?: string;
 }
 
-export function DownloadButton({ url, fileName, size = "lg" }: DownloadButtonProps) {
+export function DownloadButton({ url, fileName, size = "lg", className }: DownloadButtonProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -59,8 +61,8 @@ export function DownloadButton({ url, fileName, size = "lg" }: DownloadButtonPro
   };
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      <Button size={size} onClick={handleDownload} disabled={loading}>
+    <div className={cn("flex flex-col items-center gap-2", className)}>
+      <Button size={size} onClick={handleDownload} disabled={loading} className="w-full sm:w-auto">
         {loading ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin mr-2" aria-hidden="true" />

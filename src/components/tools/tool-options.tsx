@@ -116,7 +116,7 @@ export function ToolOptions({ tool, options, onOptionsChange }: ToolOptionsProps
           />
         </div>
         <p className="text-xs text-muted-foreground">
-          Uses AES-256 encryption. Your password is processed locally in your browser and never uploaded.
+          Uses AES-256 encryption. Your password is sent securely over HTTPS and is not stored.
         </p>
       </div>
     ),

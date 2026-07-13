@@ -12,10 +12,19 @@ import {
   softwareApplicationSchema,
 } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
-import { ToolWorkspace } from "@/components/tools/tool-workspace";
+import dynamic from "next/dynamic";
+import { ToolIcon } from "@/components/tools/tool-icon";
 import { RelatedTools } from "@/components/tools/related-tools";
 import { FaqSection } from "@/components/home/faq-section";
-import { getToolIcon } from "@/lib/icons";
+
+const ToolWorkspace = dynamic(
+  () => import("@/components/tools/tool-workspace").then((m) => m.ToolWorkspace),
+  {
+    loading: () => (
+      <div className="mx-auto max-w-3xl h-48 animate-pulse rounded-2xl bg-muted" aria-hidden="true" />
+    ),
+  }
+);
 
 export async function generateStaticParams() {
   return PDF_TOOLS.map((tool) => ({ slug: tool.slug }));
@@ -45,8 +54,6 @@ export default async function ToolPage({
   const tool = getToolBySlug(slug);
   if (!tool) notFound();
 
-  const IconComponent = getToolIcon(tool.icon);
-
   const breadcrumbs = [
     { name: "Tools", href: "/tools" },
     { name: tool.name, href: `/tools/${tool.slug}` },
@@ -70,7 +77,7 @@ export default async function ToolPage({
           <div
             className={`mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br shadow-lg ${tool.color}`}
           >
-            <IconComponent className="h-8 w-8 text-white" aria-hidden="true" />
+            <ToolIcon name={tool.icon} className="h-8 w-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
             {tool.name}

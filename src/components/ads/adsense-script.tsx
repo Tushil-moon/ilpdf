@@ -1,20 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Script from "next/script";
-import { getCookieConsent } from "@/components/legal/cookie-consent";
+import { useCookieConsent } from "@/hooks/use-cookie-consent";
 
 const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
 
 export function AdSenseScript() {
-  const [enabled, setEnabled] = useState(false);
-
-  useEffect(() => {
-    setEnabled(getCookieConsent());
-    const onConsent = () => setEnabled(getCookieConsent());
-    window.addEventListener("ilpdf-cookie-consent", onConsent);
-    return () => window.removeEventListener("ilpdf-cookie-consent", onConsent);
-  }, []);
+  const enabled = useCookieConsent();
 
   if (!ADSENSE_CLIENT || !enabled) return null;
 

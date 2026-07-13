@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import { buildMetadata } from "@/lib/seo";
+import { Link } from "@/i18n/navigation";
 import { LegalPage } from "@/components/legal/legal-page";
 
 export const metadata: Metadata = buildMetadata({
@@ -47,13 +48,13 @@ export default async function ContactPage({
       <h2>Before You Contact Us</h2>
       <ul>
         <li>
-          Check our <a href="/blog">blog</a> for how-to guides on common PDF tasks
+          Check our <Link href="/blog">blog</Link> for how-to guides on common PDF tasks
         </li>
         <li>
-          Review our <a href="/privacy">Privacy Policy</a> for data handling questions
+          Review our <Link href="/privacy">Privacy Policy</Link> for data handling questions
         </li>
         <li>
-          See our <a href="/terms">Terms of Service</a> for usage guidelines
+          See our <Link href="/terms">Terms of Service</Link> for usage guidelines
         </li>
       </ul>
     </LegalPage>

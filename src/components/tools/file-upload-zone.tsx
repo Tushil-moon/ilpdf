@@ -9,6 +9,10 @@ import { Progress } from "@/components/ui/progress";
 import { DownloadButton } from "@/components/tools/download-button";
 import { PdfPageEditor } from "@/components/tools/pdf-page-editor";
 import { FileOrderEditor } from "@/components/tools/file-order-editor";
+import {
+  ProcessingStatusPanel,
+  type ProcessingStatus,
+} from "@/components/tools/processing-status";
 import type { UploadFile } from "@/types";
 import type { PdfTool } from "@/types";
 import type { useToolPageState } from "@/hooks/use-tool-page-state";
@@ -19,6 +23,7 @@ interface FileUploadZoneProps {
   tool: PdfTool;
   files: UploadFile[];
   isProcessing: boolean;
+  processingStatus?: ProcessingStatus | null;
   onFilesAdded: (files: FileList | File[]) => void;
   onRemove: (id: string) => void;
   onCancel: (id: string) => void;
@@ -34,6 +39,7 @@ export function FileUploadZone({
   tool,
   files,
   isProcessing,
+  processingStatus,
   onFilesAdded,
   onRemove,
   onCancel,
@@ -80,18 +86,18 @@ export function FileUploadZone({
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="flex flex-col items-center gap-6 rounded-3xl border-2 border-green-500/30 bg-green-500/5 p-12 text-center"
+        className="flex flex-col items-center gap-4 rounded-2xl border-2 border-green-500/30 bg-green-500/5 p-6 text-center sm:gap-6 sm:rounded-3xl sm:p-12"
       >
-        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-green-500/20">
-          <CheckCircle className="h-10 w-10 text-green-500" aria-hidden="true" />
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-500/20 sm:h-20 sm:w-20">
+          <CheckCircle className="h-8 w-8 text-green-500 sm:h-10 sm:w-10" aria-hidden="true" />
         </div>
         <div>
-          <h3 className="text-2xl font-bold">Your file is ready!</h3>
-          <p className="mt-2 text-muted-foreground">{result.name}</p>
+          <h3 className="text-xl font-bold sm:text-2xl">Your file is ready!</h3>
+          <p className="mt-2 break-all text-sm text-muted-foreground sm:text-base">{result.name}</p>
         </div>
-        <div className="flex gap-4">
-          <DownloadButton url={result.url} fileName={result.name} />
-          <Button variant="outline" size="lg" onClick={onReset}>
+        <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:gap-4">
+          <DownloadButton url={result.url} fileName={result.name} className="w-full sm:w-auto" />
+          <Button variant="outline" size="lg" onClick={onReset} className="w-full sm:w-auto">
             Process Another
           </Button>
         </div>
@@ -100,8 +106,8 @@ export function FileUploadZone({
   }
 
   return (
-    <div className="space-y-6">
-      {canAddMore && (
+    <div className="space-y-4 sm:space-y-6">
+      {canAddMore && !isProcessing && (
         <div
           role="button"
           tabIndex={0}
@@ -114,26 +120,26 @@ export function FileUploadZone({
           }}
           onClick={() => inputRef.current?.click()}
           className={cn(
-            "relative flex cursor-pointer flex-col items-center justify-center rounded-3xl border-2 border-dashed p-12 transition-all duration-300",
+            "relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed p-6 transition-all duration-300 sm:rounded-3xl sm:p-10 md:p-12",
             isDragging
-              ? "border-red-500 bg-red-500/5 scale-[1.02]"
+              ? "border-red-500 bg-red-500/5 scale-[1.01]"
               : "border-border hover:border-red-500/50 hover:bg-accent/50",
-            showPageEditor && "p-8"
+            showPageEditor && "p-5 sm:p-8"
           )}
         >
           <motion.div
-            animate={isDragging ? { scale: 1.1 } : { scale: 1 }}
-            className="flex flex-col items-center gap-4"
+            animate={isDragging ? { scale: 1.05 } : { scale: 1 }}
+            className="flex flex-col items-center gap-3 sm:gap-4"
           >
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-red-500 to-rose-600 shadow-lg shadow-red-500/25">
-              <Upload className="h-8 w-8 text-white" aria-hidden="true" />
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-red-500 to-rose-600 shadow-lg shadow-red-500/25 sm:h-16 sm:w-16">
+              <Upload className="h-7 w-7 text-white sm:h-8 sm:w-8" aria-hidden="true" />
             </div>
             <div className="text-center">
-              <p className="text-lg font-semibold">
+              <p className="text-base font-semibold sm:text-lg">
                 {showPageEditor ? "Add more files" : "Drop your files here"}
               </p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                or click to browse • Max {process.env.NEXT_PUBLIC_MAX_FILE_SIZE_MB ?? 50}MB
+              <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
+                or tap to browse • Max {process.env.NEXT_PUBLIC_MAX_FILE_SIZE_MB ?? 50}MB
               </p>
             </div>
           </motion.div>
@@ -151,6 +157,10 @@ export function FileUploadZone({
         </div>
       )}
 
+      {isProcessing && processingStatus && (
+        <ProcessingStatusPanel status={processingStatus} />
+      )}
+
       {!showPageEditor && (
         <AnimatePresence>
           {activeFiles.length > 0 && (
@@ -158,7 +168,7 @@ export function FileUploadZone({
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="space-y-3"
+              className="space-y-2 sm:space-y-3"
               role="list"
               aria-label="Upload queue"
             >
@@ -169,6 +179,7 @@ export function FileUploadZone({
                   onRetry={onRetry}
                   onCancel={onCancel}
                   onRemove={onRemove}
+                  suppressProgress={isProcessing}
                 />
               ))}
             </motion.div>
@@ -177,9 +188,9 @@ export function FileUploadZone({
       )}
 
       {showPageEditor && pageState && (
-        <div className="rounded-2xl border border-border/50 bg-card p-6 space-y-6">
-          <div className="flex items-center justify-between gap-4">
-            <h3 className="font-semibold">
+        <div className="rounded-xl border border-border/50 bg-card p-4 space-y-4 sm:rounded-2xl sm:p-6 sm:space-y-6">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+            <h3 className="truncate font-semibold text-sm sm:text-base">
               {activeFiles.length === 1
                 ? activeFiles[0].file.name
                 : `${activeFiles.length} files`}
@@ -188,6 +199,7 @@ export function FileUploadZone({
               <Button
                 variant="ghost"
                 size="sm"
+                className="self-start"
                 onClick={() => onRemove(activeFiles[0].id)}
               >
                 <X className="h-4 w-4 mr-1" />
@@ -234,6 +246,7 @@ export function FileUploadZone({
                   onCancel={onCancel}
                   onRemove={onRemove}
                   compact
+                  suppressProgress={isProcessing}
                 />
               ))}
             </div>
@@ -242,21 +255,21 @@ export function FileUploadZone({
       )}
 
       {hasPending && (
-        <div className="flex flex-col items-center gap-2">
+        <div className="sticky bottom-3 z-10 flex flex-col items-stretch gap-2 rounded-xl border border-border/50 bg-background/95 p-3 shadow-lg backdrop-blur-sm sm:static sm:items-center sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none">
           <Button
             size="lg"
             onClick={onProcess}
             disabled={isProcessing || !canProcess}
-            className="min-w-[220px]"
+            className="w-full sm:min-w-[220px] sm:w-auto"
           >
             {isProcessing
-              ? "Processing..."
+              ? processingStatus?.message ?? "Processing..."
               : showPageEditor
                 ? "Download PDF"
                 : `Process ${tool.name}`}
           </Button>
           {showPageEditor && !canProcess && !pageState?.loading && (
-            <p className="text-xs text-muted-foreground">
+            <p className="text-center text-xs text-muted-foreground">
               {pageState?.mode === "pages-delete"
                 ? "Mark at least one page to delete"
                 : pageState?.mode === "pages-select"
@@ -276,13 +289,18 @@ function FileListItem({
   onCancel,
   onRemove,
   compact,
+  suppressProgress,
 }: {
   file: UploadFile;
   onRetry: (id: string) => void;
   onCancel: (id: string) => void;
   onRemove: (id: string) => void;
   compact?: boolean;
+  suppressProgress?: boolean;
 }) {
+  const isActive = file.status === "uploading" || file.status === "processing";
+  const showProgress = isActive && !suppressProgress;
+
   return (
     <motion.div
       role="listitem"
@@ -290,44 +308,54 @@ function FileListItem({
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
       className={cn(
-        "flex items-center gap-4 rounded-2xl border border-border/50 bg-card",
-        compact ? "p-3" : "p-4"
+        "flex flex-col gap-2 rounded-xl border border-border/50 bg-card sm:flex-row sm:items-center sm:gap-4 sm:rounded-2xl",
+        compact ? "p-3" : "p-3 sm:p-4"
       )}
     >
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-500/10">
-        {file.status === "error" ? (
-          <AlertCircle className="h-5 w-5 text-red-500" />
-        ) : file.status === "completed" ? (
-          <CheckCircle className="h-5 w-5 text-green-500" />
-        ) : (
-          <FileText className="h-5 w-5 text-red-500" />
-        )}
+      <div className="flex min-w-0 items-center gap-3 sm:gap-4">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-red-500/10 sm:h-10 sm:w-10">
+          {file.status === "error" ? (
+            <AlertCircle className="h-5 w-5 text-red-500" />
+          ) : file.status === "completed" ? (
+            <CheckCircle className="h-5 w-5 text-green-500" />
+          ) : (
+            <FileText className="h-5 w-5 text-red-500" />
+          )}
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-medium sm:text-base">{file.file.name}</p>
+          <p className="text-xs text-muted-foreground">{formatFileSize(file.file.size)}</p>
+        </div>
+        <div className="flex shrink-0 gap-1 sm:order-last">
+          {file.status === "error" && (
+            <Button variant="ghost" size="icon" onClick={() => onRetry(file.id)} aria-label="Retry">
+              <RefreshCw className="h-4 w-4" />
+            </Button>
+          )}
+          {isActive && (
+            <Button variant="ghost" size="icon" onClick={() => onCancel(file.id)} aria-label="Cancel">
+              <X className="h-4 w-4" />
+            </Button>
+          )}
+          {!isActive && (
+            <Button variant="ghost" size="icon" onClick={() => onRemove(file.id)} aria-label="Remove">
+              <X className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
       </div>
-      <div className="min-w-0 flex-1">
-        <p className="truncate font-medium">{file.file.name}</p>
-        <p className="text-xs text-muted-foreground">{formatFileSize(file.file.size)}</p>
-        {file.status !== "pending" && file.status !== "error" && (
-          <Progress value={file.progress} className="mt-2 h-1" />
-        )}
-        {file.error && <p className="mt-1 text-xs text-red-500">{file.error}</p>}
-      </div>
-      <div className="flex gap-1">
-        {file.status === "error" && (
-          <Button variant="ghost" size="icon" onClick={() => onRetry(file.id)} aria-label="Retry">
-            <RefreshCw className="h-4 w-4" />
-          </Button>
-        )}
-        {(file.status === "uploading" || file.status === "processing") && (
-          <Button variant="ghost" size="icon" onClick={() => onCancel(file.id)} aria-label="Cancel">
-            <X className="h-4 w-4" />
-          </Button>
-        )}
-        {file.status !== "processing" && file.status !== "uploading" && (
-          <Button variant="ghost" size="icon" onClick={() => onRemove(file.id)} aria-label="Remove">
-            <X className="h-4 w-4" />
-          </Button>
-        )}
-      </div>
+
+      {showProgress && (
+        <div className="w-full space-y-1 sm:min-w-[140px] sm:max-w-[180px]">
+          <div className="flex items-center justify-between gap-2 text-[11px] text-muted-foreground sm:text-xs">
+            <span className="truncate">{file.stageMessage ?? "Processing..."}</span>
+            <span className="shrink-0 tabular-nums font-medium text-foreground">{file.progress}%</span>
+          </div>
+          <Progress value={file.progress} className="h-1.5" />
+        </div>
+      )}
+
+      {file.error && <p className="text-xs text-red-500 sm:col-span-full">{file.error}</p>}
     </motion.div>
   );
 }

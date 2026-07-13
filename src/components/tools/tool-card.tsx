@@ -1,6 +1,6 @@
 "use client";
 
-import { getToolIcon } from "@/lib/icons";
+import { ToolIcon } from "@/components/tools/tool-icon";
 import { motion } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
@@ -12,8 +12,6 @@ interface ToolCardProps {
 }
 
 export function ToolCard({ tool, index = 0 }: ToolCardProps) {
-  const IconComponent = getToolIcon(tool.icon);
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -33,7 +31,7 @@ export function ToolCard({ tool, index = 0 }: ToolCardProps) {
               tool.color
             )}
           >
-            <IconComponent className="h-6 w-6 text-white" aria-hidden="true" />
+            <ToolIcon name={tool.icon} className="h-6 w-6 text-white" />
           </div>
           <h3 className="font-semibold group-hover:text-red-500 transition-colors">
             {tool.name}

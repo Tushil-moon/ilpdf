@@ -18,6 +18,7 @@ export function ToolWorkspace({ tool }: ToolWorkspaceProps) {
   const {
     files,
     isProcessing,
+    processingStatus,
     result,
     addFiles,
     removeFile,
@@ -53,6 +54,7 @@ export function ToolWorkspace({ tool }: ToolWorkspaceProps) {
         tool={tool}
         files={files}
         isProcessing={isProcessing}
+        processingStatus={processingStatus}
         onFilesAdded={addFiles}
         onRemove={removeFile}
         onCancel={cancelFile}

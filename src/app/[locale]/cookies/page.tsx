@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import { buildMetadata } from "@/lib/seo";
+import { Link } from "@/i18n/navigation";
 import { LegalPage } from "@/components/legal/legal-page";
 
 export const metadata: Metadata = buildMetadata({
@@ -87,7 +88,7 @@ export default async function CookiesPage({
       <p>
         Questions about cookies? Email{" "}
         <a href="mailto:privacy@ilpdf.com">privacy@ilpdf.com</a> or see our{" "}
-        <a href="/privacy">Privacy Policy</a>.
+        <Link href="/privacy">Privacy Policy</Link>.
       </p>
     </LegalPage>
   );

@@ -1,34 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
+import {
+  CONSENT_KEY,
+  notifyCookieConsentChange,
+  useCookieBannerVisible,
+} from "@/hooks/use-cookie-consent";
 
-const CONSENT_KEY = "ilpdf-cookie-consent";
-
-export function getCookieConsent(): boolean {
-  if (typeof window === "undefined") return false;
-  return localStorage.getItem(CONSENT_KEY) === "accepted";
-}
+export { getCookieConsent, CONSENT_KEY } from "@/hooks/use-cookie-consent";
 
 export function CookieConsent() {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    if (!localStorage.getItem(CONSENT_KEY)) {
-      setVisible(true);
-    }
-  }, []);
+  const visible = useCookieBannerVisible();
 
   const accept = () => {
     localStorage.setItem(CONSENT_KEY, "accepted");
-    setVisible(false);
-    window.dispatchEvent(new Event("ilpdf-cookie-consent"));
+    notifyCookieConsentChange();
   };
 
   const decline = () => {
     localStorage.setItem(CONSENT_KEY, "declined");
-    setVisible(false);
+    notifyCookieConsentChange();
   };
 
   if (!visible) return null;

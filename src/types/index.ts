@@ -24,18 +24,25 @@ export interface PdfTool {
   faq: { question: string; answer: string }[];
 }
 
+export interface ProcessOptions {
+  onProgress?: (update: {
+    progress: number;
+    stage: string;
+    message: string;
+  }) => void;
+  [key: string]: unknown;
+}
+
 export interface UploadFile {
   id: string;
   file: File;
   progress: number;
   status: "pending" | "uploading" | "processing" | "completed" | "error" | "cancelled";
+  stage?: string;
+  stageMessage?: string;
   error?: string;
   resultUrl?: string;
   resultName?: string;
-}
-
-export interface ProcessOptions {
-  [key: string]: unknown;
 }
 
 export interface JobResult {

@@ -7,7 +7,7 @@ import { rateLimit, SECURITY_HEADERS } from "@/lib/security";
 
 const intlMiddleware = createMiddleware(routing);
 
-const protectedRoutes = ["/dashboard", "/admin"];
+const protectedRoutes = ["/dashboard"];
 const authRoutes = ["/login", "/signup"];
 
 const METADATA_ROUTES = new Set([

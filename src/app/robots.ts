@@ -3,7 +3,7 @@ import { getAppUrl } from "@/lib/utils";
 import { routing } from "@/i18n/routing";
 
 const LOCALES = routing.locales;
-const AUTH_PATHS = ["/login", "/signup", "/dashboard", "/admin"];
+const AUTH_PATHS = ["/login", "/signup", "/dashboard"];
 
 function localeDisallows(): string[] {
   const paths: string[] = ["/api/"];
@@ -14,7 +14,7 @@ function localeDisallows(): string[] {
       paths.push(`${prefix}${path}/`);
     }
   }
-  paths.push("/dashboard/", "/admin/", "/login", "/signup");
+  paths.push("/dashboard/", "/login", "/signup");
   return paths;
 }
 

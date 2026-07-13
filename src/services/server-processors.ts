@@ -233,7 +233,7 @@ export async function powerpointToPdf(file: Uint8Array): Promise<JobResult> {
     const xml = await zip.file(slideFiles[i])?.async("text");
     const texts = extractXmlTexts(xml ?? "");
     const page = pdf.addPage(PageSizes.A4);
-    const { width, height } = page.getSize();
+    const { height } = page.getSize();
 
     page.drawText(`Slide ${i + 1}`, {
       x: 50,

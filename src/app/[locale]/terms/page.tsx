@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import { buildMetadata } from "@/lib/seo";
+import { Link } from "@/i18n/navigation";
 import { LegalPage } from "@/components/legal/legal-page";
 
 export const metadata: Metadata = buildMetadata({
@@ -59,7 +60,7 @@ export default async function TermsPage({
       <p>
         The Service displays advertisements provided by Google AdSense. Ad content is managed by
         Google and subject to Google&apos;s advertising policies. See our{" "}
-        <a href="/privacy">Privacy Policy</a> and <a href="/cookies">Cookie Policy</a> for details
+        <Link href="/privacy">Privacy Policy</Link> and <Link href="/cookies">Cookie Policy</Link> for details
         on how advertising partners use data.
       </p>
       <h2>6. Intellectual Property</h2>
@@ -86,7 +87,7 @@ export default async function TermsPage({
       <p>
         Questions about these Terms? Contact us at{" "}
         <a href="mailto:legal@ilpdf.com">legal@ilpdf.com</a> or visit our{" "}
-        <a href="/contact">Contact page</a>.
+        <Link href="/contact">Contact page</Link>.
       </p>
     </LegalPage>
   );
